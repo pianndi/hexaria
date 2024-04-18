@@ -12,7 +12,7 @@ class Game {
       this,
       this.canvas.width / 2,
       this.canvas.height - 100,
-      30,
+      22,
       true
     );
     this.total = [0, 0];
@@ -22,6 +22,8 @@ class Game {
       x: 0,
       y: 0,
     };
+    this.player1 = "Player";
+    this.player2 = "Bot";
     canvas.addEventListener("mousemove", (e) => {
       this.mouse = {
         x: e.clientX - this.bound.left,
@@ -44,10 +46,10 @@ class Game {
     this.hexagons.forEach((item) => item.draw());
 
     this.current.draw();
-    this.ctx.font = "22px Arial";
+    this.ctx.font = "18px Arial";
     this.ctx.fillText(
       "Current: ",
-      this.canvas.width / 2 - 70,
+      this.canvas.width / 2 - 55,
       this.height - 98
     );
     this.drawStatus();
@@ -56,12 +58,12 @@ class Game {
     const a = (2 * Math.PI) / 6;
     let r = 35;
     for (
-      let x = 50;
+      let x = 60;
       x + r * Math.sin(a) < r * 2 * 10 - r;
       x += r * 2 * Math.sin(a)
     ) {
       for (
-        let y = 50, j = 0;
+        let y = 60, j = 0;
         y + r * (1 + Math.cos(a)) < r * 2 * 8 - r * 2;
         y += r * (1 + Math.cos(a)), x += (-1) ** j++ * r * Math.sin(a)
       ) {
@@ -134,35 +136,37 @@ class Game {
   }
   drawStatus() {
     this.ctx.fillStyle = "red";
-    this.ctx.fillRect(this.width / 4, this.height - 50, 20, 20);
-    this.ctx.strokeRect(this.width / 4, this.height - 50, 20, 20);
+    this.ctx.fillRect(this.width / 4, this.height - 60, 20, 20);
     this.ctx.fillStyle = "blue";
     this.ctx.fillRect(
       this.width / 4 + (this.width / 4) * 2,
-      this.height - 50,
-      20,
-      20
-    );
-    this.ctx.strokeRect(
-      this.width / 4 + (this.width / 4) * 2,
-      this.height - 50,
+      this.height - 60,
       20,
       20
     );
     this.ctx.fillStyle = "silver";
+    this.ctx.textAlign = "start";
+    this.ctx.fillText(this.player1, this.width / 4 + 25, this.height - 50);
+    this.ctx.textAlign = "end";
+    this.ctx.fillText(
+      this.player2,
+      this.width / 4 + (this.width / 4) * 2 - 5,
+      this.height - 50
+    );
+    this.ctx.textAlign = "center";
     this.ctx.font = "bold 30px Arial";
-    this.ctx.fillText(this.total[0], this.width / 4 + 10, this.height - 10);
+    this.ctx.fillText(this.total[0], this.width / 4 + 10, this.height - 20);
     this.ctx.fillText(
       this.total[1],
       this.width / 4 + (this.width / 4) * 2 + 10,
-      this.height - 10
+      this.height - 20
     );
   }
 }
 
 function main() {
   const canvas = document.getElementById("cvs");
-  canvas.width = 800;
+  canvas.width = 700;
   canvas.height = 600;
   const ctx = canvas.getContext("2d");
 
