@@ -16,7 +16,7 @@ class Game {
         x: e.clientX - this.bound.left,
         y: e.clientY - this.bound.top,
       };
-      console.log(this.mouse);
+      this.clickHex(this.mouse.x, this.mouse.y);
     });
     window.addEventListener("resize", () => {
       this.bound = this.canvas.getBoundingClientRect();
@@ -47,7 +47,10 @@ class Game {
     }
   }
   clickHex(x, y) {
-    //
+    this.hexagons.forEach((hexagon, i) => {
+      // local hex
+      hexagon.collide(x, y);
+    });
   }
 }
 
