@@ -6,6 +6,8 @@ class Game {
     this.height = this.canvas.height;
     this.bound = canvas.getBoundingClientRect();
     this.hexagons = [];
+    this.turn = 1;
+    this.number = Math.ceil(Math.random() * 20);
     this.mouse = {
       x: 0,
       y: 0,
@@ -24,10 +26,17 @@ class Game {
   }
   render() {
     this.hexagons.forEach((item) => item.draw());
+
+    this.ctx.font = "30px Arial";
+    this.ctx.fillText(
+      `current: ${this.number}`,
+      this.width / 2,
+      this.height - 100
+    );
   }
   generateGrid() {
     const a = (2 * Math.PI) / 6;
-    let r = 30;
+    let r = 35;
     for (
       let x = 50;
       x + r * Math.sin(a) < r * 2 * 10 - r;
@@ -49,7 +58,12 @@ class Game {
   clickHex(x, y) {
     this.hexagons.forEach((hexagon, i) => {
       // local hex
-      hexagon.collide(x, y);
+      if (hexagon.collide(x, y) && hexagon.number < this.number) {
+        this.hexagons[i].color = this.turn ? "red" : "blue";
+        this.hexagons[i].number = this.number;
+        this.number = Math.ceil(Math.random() * 20);
+        this.turn = !this.turn;
+      }
     });
   }
 }

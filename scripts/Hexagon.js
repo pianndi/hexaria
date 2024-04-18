@@ -7,7 +7,9 @@ class Hexagon {
     this.side = 6;
     this.a = (2 * Math.PI) / this.side;
     this.disabled = disabled;
-    this.child = {};
+    this.number = 0;
+    this.color = false;
+    this.hover = false;
   }
   draw() {
     this.game.ctx.beginPath();
@@ -23,15 +25,26 @@ class Hexagon {
     if (this.disabled) {
       this.game.ctx.fillStyle = "gray";
       this.game.ctx.fill();
+    } else {
+      if (this.color) {
+        this.game.ctx.fillStyle = this.color;
+        this.game.ctx.fill();
+      }
+      if (this.number) {
+        this.game.ctx.fillStyle = "silver";
+        this.game.ctx.font = "20px Arial";
+        this.game.ctx.textAlign = "center";
+        this.game.ctx.textBaseline = "middle";
+        this.game.ctx.fillText(this.number, this.x, this.y);
+      }
     }
   }
   collide(x, y) {
-    // isMouseIn(radius,sides,center[0],center[1],mp.x,mp.y)
     var m = this.r * Math.cos(Math.PI / this.side),
       d = Math.hypot(x - this.x, y - this.y),
       a = Math.atan2(this.y - y, x - this.x);
     const clicked =
       d <= (this.r + m) / 2 + (Math.cos(a * this.side) * (this.r - m)) / 2;
-    if (clicked) this.disabled = !this.disabled;
+    return clicked;
   }
 }
