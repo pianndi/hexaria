@@ -8,11 +8,27 @@ class Game {
     this.hexagons = [];
     this.turn = 1;
     this.number = Math.ceil(Math.random() * 20);
+    this.current = new Hexagon(
+      this,
+      this.canvas.width / 2,
+      this.canvas.height - 100,
+      30,
+      true
+    );
+    this.total = [0, 0];
+    this.current.number = this.number;
+    this.current.color = this.turn ? "red" : "blue";
     this.mouse = {
       x: 0,
       y: 0,
     };
-
+    canvas.addEventListener("mousemove", (e) => {
+      this.mouse = {
+        x: e.clientX - this.bound.left,
+        y: e.clientY - this.bound.top,
+      };
+      this.hover(this.mouse.x, this.mouse.y);
+    });
     canvas.addEventListener("click", (e) => {
       this.mouse = {
         x: e.clientX - this.bound.left,
@@ -27,12 +43,14 @@ class Game {
   render() {
     this.hexagons.forEach((item) => item.draw());
 
-    this.ctx.font = "30px Arial";
+    this.current.draw();
+    this.ctx.font = "22px Arial";
     this.ctx.fillText(
-      `current: ${this.number}`,
-      this.width / 2,
-      this.height - 100
+      "Current: ",
+      this.canvas.width / 2 - 70,
+      this.height - 98
     );
+    this.drawStatus();
   }
   generateGrid() {
     const a = (2 * Math.PI) / 6;
@@ -56,15 +74,89 @@ class Game {
     }
   }
   clickHex(x, y) {
+    let ada = false;
     this.hexagons.forEach((hexagon, i) => {
       // local hex
-      if (hexagon.collide(x, y) && hexagon.number < this.number) {
+      if (
+        hexagon.collide(x, y) &&
+        hexagon.number < this.number &&
+        hexagon.color != (this.turn ? "red" : "blue") &&
+        !ada
+      ) {
+        ada = true;
         this.hexagons[i].color = this.turn ? "red" : "blue";
         this.hexagons[i].number = this.number;
+        this.total = [0, 0];
+        this.hexagons.forEach((item, index) => {
+          if (
+            this.circleOverlap(item, hexagon) &&
+            hexagon.color == item.color &&
+            i != index &&
+            item.number <= 22
+          ) {
+            this.hexagons[index].number++;
+          }
+          this.total[item.color == "red" ? 0 : 1] += item.number;
+        });
         this.number = Math.ceil(Math.random() * 20);
         this.turn = !this.turn;
+        this.current.number = this.number;
+        this.current.color = this.turn ? "red" : "blue";
       }
     });
+  }
+  hover(x, y) {
+    let ada = false;
+    this.hexagons.forEach((hexagon, i) => {
+      if (
+        hexagon.collide(x, y) &&
+        hexagon.color != (this.turn ? "red" : "blue") &&
+        hexagon.number < this.number &&
+        !ada
+      ) {
+        ada = true;
+        this.hexagons[i].hover = true;
+      } else {
+        this.hexagons[i].hover = false;
+      }
+    });
+  }
+  distance(a, b) {
+    const distanceX = a.x - b.x;
+    const distanceY = a.y - b.y;
+
+    return Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+  }
+  circleOverlap(a, b) {
+    const radii = a.r + b.r;
+
+    return this.distance(a, b) <= radii;
+  }
+  drawStatus() {
+    this.ctx.fillStyle = "red";
+    this.ctx.fillRect(this.width / 4, this.height - 50, 20, 20);
+    this.ctx.strokeRect(this.width / 4, this.height - 50, 20, 20);
+    this.ctx.fillStyle = "blue";
+    this.ctx.fillRect(
+      this.width / 4 + (this.width / 4) * 2,
+      this.height - 50,
+      20,
+      20
+    );
+    this.ctx.strokeRect(
+      this.width / 4 + (this.width / 4) * 2,
+      this.height - 50,
+      20,
+      20
+    );
+    this.ctx.fillStyle = "silver";
+    this.ctx.font = "bold 30px Arial";
+    this.ctx.fillText(this.total[0], this.width / 4 + 10, this.height - 10);
+    this.ctx.fillText(
+      this.total[1],
+      this.width / 4 + (this.width / 4) * 2 + 10,
+      this.height - 10
+    );
   }
 }
 
@@ -76,11 +168,8 @@ function main() {
 
   const game = new Game(canvas, ctx);
   game.generateGrid();
-  console.log(game);
 
-  let lastTime = performance.now();
-  function animate(timestamp) {
-    const deltaTime = timestamp - lastTime;
+  function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     game.render();

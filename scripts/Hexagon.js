@@ -1,5 +1,5 @@
 class Hexagon {
-  constructor(game, x, y, r, disabled = false) {
+  constructor(game, x, y, r, disabled = false, number = 0) {
     this.game = game;
     this.x = x;
     this.y = y;
@@ -7,7 +7,7 @@ class Hexagon {
     this.side = 6;
     this.a = (2 * Math.PI) / this.side;
     this.disabled = disabled;
-    this.number = 0;
+    this.number = number;
     this.color = false;
     this.hover = false;
   }
@@ -22,21 +22,33 @@ class Hexagon {
     this.game.ctx.closePath();
     this.game.ctx.strokeStyle = "silver";
     this.game.ctx.stroke();
+
     if (this.disabled) {
       this.game.ctx.fillStyle = "gray";
       this.game.ctx.fill();
-    } else {
-      if (this.color) {
-        this.game.ctx.fillStyle = this.color;
-        this.game.ctx.fill();
-      }
-      if (this.number) {
-        this.game.ctx.fillStyle = "silver";
-        this.game.ctx.font = "20px Arial";
-        this.game.ctx.textAlign = "center";
-        this.game.ctx.textBaseline = "middle";
-        this.game.ctx.fillText(this.number, this.x, this.y);
-      }
+    }
+    if (this.color) {
+      this.game.ctx.fillStyle = this.color;
+      this.game.ctx.fill();
+    }
+    if (this.number) {
+      this.game.ctx.fillStyle = "silver";
+      this.game.ctx.font = "20px Arial";
+      this.game.ctx.textAlign = "center";
+      this.game.ctx.textBaseline = "middle";
+      this.game.ctx.fillText(this.number, this.x, this.y);
+    }
+    if (this.hover) {
+      this.game.ctx.save();
+      this.game.ctx.globalAlpha = 0.25;
+      this.game.ctx.fillStyle = this.game.turn ? "red" : "blue";
+      this.game.ctx.fill();
+      this.game.ctx.fillStyle = "silver";
+      this.game.ctx.font = "20px Arial";
+      this.game.ctx.textAlign = "center";
+      this.game.ctx.textBaseline = "middle";
+      this.game.ctx.fillText(this.game.number, this.x, this.y);
+      this.game.ctx.restore();
     }
   }
   collide(x, y) {
@@ -45,6 +57,6 @@ class Hexagon {
       a = Math.atan2(this.y - y, x - this.x);
     const clicked =
       d <= (this.r + m) / 2 + (Math.cos(a * this.side) * (this.r - m)) / 2;
-    return clicked;
+    return clicked && !this.disabled;
   }
 }
