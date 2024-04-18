@@ -22,6 +22,7 @@ class Game {
       x: 0,
       y: 0,
     };
+    this.disabled = 0;
     this.player1 = "Player";
     this.player2 = "Bot";
     canvas.addEventListener("mousemove", (e) => {
@@ -74,6 +75,7 @@ class Game {
       let index = Math.floor(Math.random() * this.hexagons.length);
       this.hexagons[index].disabled = true;
     }
+    this.disabled = this.hexagons.filter((value) => value.disabled).length;
   }
   clickHex(x, y) {
     let ada = false;
@@ -106,6 +108,12 @@ class Game {
         this.current.color = this.turn ? "red" : "blue";
       }
     });
+    const filled = this.hexagons.filter(
+      (value) => !value.disabled && value.number
+    ).length;
+    console.log(
+      `Game over = ${+this.hexagons.length - this.disabled == filled}`
+    );
   }
   hover(x, y) {
     let ada = false;
