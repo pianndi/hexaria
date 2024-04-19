@@ -55,6 +55,7 @@ class Game {
     );
     this.drawStatus();
   }
+  // make a grid hex
   generateGrid() {
     const a = (2 * Math.PI) / 6;
     let r = 35;
@@ -68,6 +69,17 @@ class Game {
         y + r * (1 + Math.cos(a)) < r * 2 * 8 - r * 2;
         y += r * (1 + Math.cos(a)), x += (-1) ** j++ * r * Math.sin(a)
       ) {
+        // this.hexagons.push(
+        //   new Hexagon(
+        //     this,
+        //     x,
+        //     y,
+        //     r,
+        //     false,
+        //     this.number,
+        //     this.turn ? "red" : "blue"
+        //   )
+        // );
         this.hexagons.push(new Hexagon(this, x, y, r));
       }
     }
@@ -108,12 +120,7 @@ class Game {
         this.current.color = this.turn ? "red" : "blue";
       }
     });
-    const filled = this.hexagons.filter(
-      (value) => !value.disabled && value.number
-    ).length;
-    console.log(
-      `Game over = ${+this.hexagons.length - this.disabled == filled}`
-    );
+    this.over();
   }
   hover(x, y) {
     let ada = false;
@@ -170,9 +177,18 @@ class Game {
       this.height - 20
     );
   }
+  over() {
+    const filled = this.hexagons.filter(
+      (value) => !value.disabled && value.number
+    ).length;
+    this.gameOver = this.hexagons.length - this.disabled == filled;
+  }
 }
 
 function main() {
+  document.querySelector(".container.home").classList.add("hide");
+  document.querySelector(".container.game").classList.remove("hide");
+  document.querySelector(".alert").classList.add("hide");
   const canvas = document.getElementById("cvs");
   canvas.width = 700;
   canvas.height = 600;
@@ -180,15 +196,42 @@ function main() {
 
   const game = new Game(canvas, ctx);
   game.generateGrid();
+  game.player1 = document.getElementById("player1").value;
+  game.player2 = document.getElementById("player2").value;
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     game.render();
-
-    requestAnimationFrame(animate);
+    if (!game.gameOver) {
+      requestAnimationFrame(animate);
+    } else {
+      document.querySelector(".alert").classList.remove("hide");
+      //
+    }
   }
   requestAnimationFrame(animate);
 }
 
-main();
+document.querySelectorAll(".close").forEach((item) => {
+  item.addEventListener("click", (e) => {
+    e.target.parentElement.parentElement.classList.add("hide");
+  });
+});
+document.getElementById("lawan").addEventListener("change", (e) => {
+  if (e.target.value == "bot") {
+    document.getElementById("player2").disabled = true;
+    document.getElementById("player2").value = "Bot";
+  } else {
+    document.getElementById("player2").disabled = false;
+    document.getElementById("player2").value = "";
+  }
+});
+playBtn.addEventListener("click", () => {
+  if (
+    document.getElementById("player1").value &&
+    document.getElementById("player2").value
+  ) {
+    main();
+  }
+});
