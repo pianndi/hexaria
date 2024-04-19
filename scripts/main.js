@@ -25,23 +25,25 @@ class Game {
     this.disabled = 0;
     this.player1 = "Player";
     this.player2 = "Bot";
-    canvas.addEventListener("mousemove", (e) => {
+    canvas.onmousemove = (e) => {
+      if (this.gameOver) return;
       this.mouse = {
         x: e.clientX - this.bound.left,
         y: e.clientY - this.bound.top,
       };
       this.hover(this.mouse.x, this.mouse.y);
-    });
-    canvas.addEventListener("click", (e) => {
+    };
+    canvas.onclick = (e) => {
+      if (this.gameOver) return;
       this.mouse = {
         x: e.clientX - this.bound.left,
         y: e.clientY - this.bound.top,
       };
       this.clickHex(this.mouse.x, this.mouse.y);
-    });
-    window.addEventListener("resize", () => {
+    };
+    window.onresize = () => {
       this.bound = this.canvas.getBoundingClientRect();
-    });
+    };
   }
   render() {
     this.hexagons.forEach((item) => item.draw());
@@ -189,8 +191,8 @@ class Game {
           score: this.total[0],
         },
         player2: {
-          name: this.player1,
-          score: this.total[0],
+          name: this.player2,
+          score: this.total[1],
         },
         date: Date.now(),
       };
