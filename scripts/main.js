@@ -22,6 +22,7 @@ class Game {
       x: 0,
       y: 0,
     };
+    this.level = 4;
     this.disabled = 0;
     this.player1 = "Player";
     this.player2 = "Bot";
@@ -85,7 +86,7 @@ class Game {
         this.hexagons.push(new Hexagon(this, x, y, r));
       }
     }
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < this.level; i++) {
       let index = Math.floor(Math.random() * this.hexagons.length);
       this.hexagons[index].disabled = true;
     }
@@ -218,9 +219,10 @@ function main() {
   const ctx = canvas.getContext("2d");
 
   const game = new Game(canvas, ctx);
-  game.generateGrid();
   game.player1 = document.getElementById("player1").value;
   game.player2 = document.getElementById("player2").value;
+  game.level = parseInt(document.getElementById("level").value);
+  game.generateGrid();
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);

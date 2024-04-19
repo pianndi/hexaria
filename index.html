@@ -9,7 +9,8 @@
         margin: 0;
         margin-top: 1rem;
       }
-      h2 {
+      h2,
+      p {
         margin: 0;
       }
       body {
@@ -44,8 +45,8 @@
         display: flex;
         width: 100%;
         flex-direction: column;
-
-        overflow-y: scroll;
+        height: 100%;
+        overflow-y: auto;
       }
       .side .item {
         display: flex;
@@ -112,7 +113,8 @@
       .home {
         display: grid;
         grid-template-columns: 2fr 1fr;
-        gap: 2rem;
+        gap: 1rem;
+        padding: 2rem;
         align-items: center;
       }
       .main {
@@ -158,7 +160,8 @@
   <body>
     <div class="container home">
       <div class="main">
-        <h1 class="title">HEXaria</h1>
+        <h1 class="title">HEXARIA</h1>
+        <p>Hexagonal Math Game</p>
         <label for="player1"
           >Player 1
           <input type="text" id="player1" placeholder="Player 1 name" />
@@ -174,18 +177,25 @@
           >Player 2
           <input type="text" id="player2" placeholder="Player 2 name" />
         </label>
-        <label for="lawan"
+        <label for="level"
           >Level
-          <select name="lawan" id="lawan">
-            <option value="1">Easy</option>
-            <option value="2">Medium</option>
-            <option value="3">Hard</option>
+          <select name="level" id="level">
+            <option value="4">Easy</option>
+            <option value="6">Medium</option>
+            <option value="8">Hard</option>
           </select>
         </label>
         <button id="playBtn">Play</button>
       </div>
       <div class="instruction">
         <h3>Instruction</h3>
+        <div class="body">
+          <p>1. Click on empty hexagon to fill your turn</p>
+          <p>2. Override your competitors Hex with more value</p>
+          <p>3. Lorem ipsum dolor sit amet</p>
+          <p>4. Lorem afkja lkafja lkjaf lkfja kjafljkkj</p>
+          <p>5. Click on empty hexagon to fill your turn</p>
+        </div>
       </div>
     </div>
     <div class="container game hide">
@@ -193,7 +203,6 @@
         <dialog class="alert over hide">
           <h2 class="title">Game Over</h2>
           <div class="body">
-            <button>Home</button>
             <button onclick="main()">Restart</button>
           </div>
         </dialog>
