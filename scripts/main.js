@@ -182,10 +182,31 @@ class Game {
       (value) => !value.disabled && value.number
     ).length;
     this.gameOver = this.hexagons.length - this.disabled == filled;
+    if (this.gameOver) {
+      const score = {
+        player1: {
+          name: this.player1,
+          score: this.total[0],
+        },
+        player2: {
+          name: this.player1,
+          score: this.total[0],
+        },
+        date: Date.now(),
+      };
+      const lastScore =
+        JSON.parse(localStorage.getItem("leaderboard")) || new Array();
+      lastScore.push(score);
+      localStorage.setItem("leaderboard", JSON.stringify(lastScore));
+
+      getLeaderboard();
+    }
   }
 }
 
 function main() {
+  getLeaderboard();
+
   document.querySelector(".container.home").classList.add("hide");
   document.querySelector(".container.game").classList.remove("hide");
   document.querySelector(".alert").classList.add("hide");
@@ -235,3 +256,22 @@ playBtn.addEventListener("click", () => {
     main();
   }
 });
+
+function getLeaderboard() {
+  const leaderboard =
+    JSON.parse(localStorage.getItem("leaderboard")) || new Array();
+  leaderboard.sort((a, b) => b.date - a.date);
+  let html = "";
+  leaderboard.forEach((item) => {
+    html += `
+    <div class="item">
+            <div>
+              <span class="name">${item.player1.name} vs ${item.player2.name}</span>
+              <span class="score">${item.player1.score} - ${item.player2.score}</span>
+            </div>
+            <button>Detail</button>
+          </div>
+    `;
+  });
+  document.getElementById("leader").innerHTML = html;
+}
