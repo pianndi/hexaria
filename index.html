@@ -1,244 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hexaria</title>
-    <style>
-      h1 {
-        margin: 0;
-        margin-top: 1rem;
-      }
-      h2,
-      p {
-        margin: 0;
-      }
-      body {
-        display: flex;
-        justify-content: center;
-        background-color: rgb(17, 17, 17);
-        color: silver;
-        font-family: Arial, Helvetica, sans-serif;
-      }
-      .container {
-        border: 2px solid silver;
-        width: 1000px;
-        height: 600px;
-        display: flex;
-        position: relative;
-        justify-content: center;
-      }
-      canvas {
-        border-right: 2px solid silver;
-      }
-      .side {
-        gap: 1rem;
-        border-left: 2px solid silver;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 100%;
-        padding: 0 1rem;
-        align-items: center;
-      }
-      .side .body {
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-        height: 100%;
-        overflow-y: auto;
-      }
-      .side .item {
-        display: flex;
-        gap: 0.25rem;
-        border-top: 2px solid silver;
-        border-bottom: 2px solid silver;
-        padding: 0.75rem 0;
-      }
-      .side .item > * {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: space-between;
-      }
-      .alert {
-        position: absolute;
-        display: flex;
-        padding: 2rem;
-        border: 4px solid silver;
-        border-radius: 12px;
-        flex-direction: column;
-        gap: 1rem;
-        background: rgb(17, 17, 17);
-        align-items: center;
-        color: silver;
-      }
-      .alert .body {
-        display: flex;
-        width: 100%;
-        justify-content: space-around;
-        gap: 1rem;
-      }
 
-      /* .close .btn {
-        position: absolute;
-        right: 1rem;
-        top: 1rem;
-        cursor: pointer;
-        color: red;
-        font-weight: bolder;
-      } */
-      .pauseBtn {
-        font-size: 20px;
-        font-weight: bolder;
-        position: absolute;
-        left: 1rem;
-        top: 1rem;
-        cursor: pointer;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hexaria</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-      .bg {
-        background-color: rgba(0, 0, 0, 0.5);
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        display: flex;
-        align-items: center;
-      }
-      .bg:has(.hide) {
-        display: none;
-      }
-      .home {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 1rem;
-        padding: 2rem;
-        align-items: center;
-      }
-      .main {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        padding: 2rem 6rem;
-      }
-      select,
-      input,
-      button {
-        padding: 0.5rem 0.75rem;
-        border-radius: 0.4rem;
-        background: rgb(17, 17, 17);
-        border: 2px solid silver;
-        color: silver;
-      }
-      button {
-        width: 100%;
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-        font-weight: bolder;
-      }
-      button:hover {
-        background: darkgray;
-        color: black;
-      }
-      label {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 4fr;
-        align-items: center;
-        flex-wrap: nowrap;
-        gap: 0.5rem;
-      }
-      .hide {
-        display: none;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container home">
-      <div class="main">
-        <h1 class="title">HEXARIA</h1>
-        <p>Hexagonal Math Game</p>
-        <label for="player1"
-          >Player 1
-          <input type="text" id="player1" placeholder="Player 1 name" />
-        </label>
-        <label for="lawan"
-          >Play with
-          <select name="lawan" id="lawan">
-            <option value="player2">Player 2</option>
-            <option value="bot">Bot</option>
-          </select>
-        </label>
-        <label for="lawan"
-          >Player 2
-          <input type="text" id="player2" placeholder="Player 2 name" />
-        </label>
-        <label for="level"
-          >Level
-          <select name="level" id="level">
-            <option value="4">Easy</option>
-            <option value="6">Medium</option>
-            <option value="8">Hard</option>
-          </select>
-        </label>
-        <button id="playBtn">Play</button>
+<body>
+  <div class="container home">
+    <div class="main">
+      <h1 class="title">HEXARIA</h1>
+      <p>Hexagonal Math Game</p>
+      <label for="player1">Player 1
+        <input type="text" id="player1" placeholder="Player 1 name" />
+      </label>
+      <label for="lawan">Play with
+        <select name="lawan" id="lawan">
+          <option value="player2">Player 2</option>
+          <option value="bot">Bot</option>
+        </select>
+      </label>
+      <label for="lawan">Player 2
+        <input type="text" id="player2" placeholder="Player 2 name" />
+      </label>
+      <label for="level">Level
+        <select name="level" id="level">
+          <option value="4">Easy</option>
+          <option value="6">Medium</option>
+          <option value="8">Hard</option>
+        </select>
+      </label>
+      <button id="playBtn">Play</button>
+    </div>
+    <div class="instruction">
+      <h3>Instruction</h3>
+      <div class="body">
+        <p>1. Click on empty hexagon to fill your turn</p>
+        <p>2. Override your competitors Hex with more value</p>
+        <p>3. Lorem ipsum dolor sit amet</p>
+        <p>4. Lorem afkja lkafja lkjaf lkfja kjafljkkj</p>
+        <p>5. Click on empty hexagon to fill your turn</p>
       </div>
-      <div class="instruction">
-        <h3>Instruction</h3>
+    </div>
+  </div>
+  <div class="container game hide">
+    <div class="bg">
+      <dialog class="alert over hide">
+        <h2 class="title">Game Over</h2>
         <div class="body">
-          <p>1. Click on empty hexagon to fill your turn</p>
-          <p>2. Override your competitors Hex with more value</p>
-          <p>3. Lorem ipsum dolor sit amet</p>
-          <p>4. Lorem afkja lkafja lkjaf lkfja kjafljkkj</p>
-          <p>5. Click on empty hexagon to fill your turn</p>
+          <button onclick="main()">Restart</button>
+        </div>
+      </dialog>
+    </div>
+    <canvas width="700px" height="600px" id="cvs"></canvas>
+    <div class="side">
+      <h1>Leaderboard</h1>
+      <div>
+        <label for="sort">
+          Sort by
+          <select id="sort">
+            <option value="date">date</option>
+            <option value="name">name</option>
+          </select>
+        </label>
+      </div>
+      <div class="body" id="leader">
+        <div class="item">
+          <div>
+            <span class="name">Budi vs Irfan</span>
+            <span class="score">48 - 32</span>
+          </div>
+          <button>Detail</button>
+        </div>
+        <div class="item">
+          <div>
+            <span class="name">Budi vs Irfan</span>
+            <span class="score">249 - 212</span>
+          </div>
+          <button>Detail</button>
         </div>
       </div>
     </div>
-    <div class="container game hide">
-      <div class="bg">
-        <dialog class="alert over hide">
-          <h2 class="title">Game Over</h2>
-          <div class="body">
-            <button onclick="main()">Restart</button>
-          </div>
-        </dialog>
-      </div>
-      <canvas width="700px" height="600px" id="cvs"></canvas>
-      <div class="side">
-        <h1>Leaderboard</h1>
-        <div>
-          <label for="sort">
-            Sort by
-            <select id="sort">
-              <option value="date">date</option>
-              <option value="name">name</option>
-            </select>
-          </label>
-        </div>
-        <div class="body" id="leader">
-          <div class="item">
-            <div>
-              <span class="name">Budi vs Irfan</span>
-              <span class="score">48 - 32</span>
-            </div>
-            <button>Detail</button>
-          </div>
-          <div class="item">
-            <div>
-              <span class="name">Budi vs Irfan</span>
-              <span class="score">249 - 212</span>
-            </div>
-            <button>Detail</button>
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
 
-    <script src="scripts/Hexagon.js"></script>
-    <script src="scripts/main.js"></script>
-  </body>
+  <script src="scripts/Hexagon.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+
 </html>

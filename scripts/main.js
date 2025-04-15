@@ -98,7 +98,8 @@ class Game {
       // local hex
       if (
         hexagon.collide(x, y) &&
-        hexagon.number < this.number &&
+        // hexagon.number < this.number &&
+        !hexagon.number &&
         hexagon.color != (this.turn ? "red" : "blue") &&
         !ada
       ) {
@@ -109,11 +110,16 @@ class Game {
         this.hexagons.forEach((item, index) => {
           if (
             this.circleOverlap(item, hexagon) &&
-            hexagon.color == item.color &&
             i != index &&
             item.number <= 22
+            && item.number
           ) {
-            this.hexagons[index].number++;
+            if (hexagon.color == item.color) {
+              this.hexagons[index].number++;
+            }
+            if (this.number > item.number) {
+              this.hexagons[index].color = this.current.color;
+            }
           }
           this.total[item.color == "red" ? 0 : 1] += item.number;
         });
@@ -131,7 +137,8 @@ class Game {
       if (
         hexagon.collide(x, y) &&
         hexagon.color != (this.turn ? "red" : "blue") &&
-        hexagon.number < this.number &&
+        // hexagon.number < this.number &&
+        !hexagon.number &&
         !ada
       ) {
         ada = true;
